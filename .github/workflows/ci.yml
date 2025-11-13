@@ -1,0 +1,40 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: test-2/package.json
+
+      - name: Install dependencies
+        working-directory: test-2
+        run: npm ci
+
+      - name: Run lint
+        working-directory: test-2
+        run: npm run lint
+
+      - name: Run build
+        working-directory: test-2
+        run: npm run build
+
+      - name: Test
+        working-directory: test-2
+        run: npm test
+
+                                
